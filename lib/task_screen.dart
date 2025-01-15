@@ -63,33 +63,6 @@ class TaskScreen extends StatelessWidget {
                     TaskList(
                       text: 'Task 3',
                     ),
-                    TaskList(
-                      text: 'Task 4',
-                    ),
-                    TaskList(
-                      text: 'Task 5',
-                    ),
-                    TaskList(
-                      text: 'Task 6',
-                    ),
-                    TaskList(
-                      text: 'Task 7',
-                    ),
-                    TaskList(
-                      text: 'Task 2',
-                    ),
-                    TaskList(
-                      text: 'Task 3',
-                    ),
-                    TaskList(
-                      text: 'Task 4',
-                    ),
-                    TaskList(
-                      text: 'Task 5',
-                    ),
-                    TaskList(
-                      text: 'Task 12',
-                    ),
                   ]),
                 ),
               ),
@@ -169,17 +142,38 @@ class TaskList extends StatelessWidget {
   const TaskList({super.key, required this.text});
   final String text;
 
+  get onChanged => null;
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(
-        text,
-        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-      ),
-      trailing: Icon(
-        Icons.check_box_outline_blank,
-        size: 30,
-      ),
-    );
+        title: Text(
+          text,
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+        ),
+        trailing: CheckBox());
+  }
+}
+
+class CheckBox extends StatefulWidget {
+  const CheckBox({super.key});
+
+  @override
+  State<CheckBox> createState() => _CheckBoxState();
+}
+
+class _CheckBoxState extends State<CheckBox> {
+  bool isChecked = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Checkbox(
+        activeColor: Colors.lightBlueAccent,
+        value: isChecked,
+        onChanged: (newValue) {
+          setState(() {
+            isChecked = newValue!;
+          });
+        });
   }
 }
