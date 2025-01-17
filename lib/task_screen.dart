@@ -10,11 +10,14 @@ class TaskScreen extends StatefulWidget {
 }
 
 class _TaskScreenState extends State<TaskScreen> {
-  List<Task> tasks = [
-    Task(name: 'Buy Milk', isCompleted: false),
-    Task(name: 'Buy Milk', isCompleted: false),
-    Task(name: 'Buy Milk', isCompleted: false)
-  ];
+  TextEditingController myController = TextEditingController();
+
+  List<Task> tasks = [];
+  void toggleTaskCompletion(int index, bool? newValue) {
+    setState(() {
+      tasks[index].isCompleted = newValue ?? false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +53,7 @@ class _TaskScreenState extends State<TaskScreen> {
                         fontWeight: FontWeight.w700),
                   ),
                   Text(
-                    '12 Tasks',
+                    '${tasks.length} Tasks',
                     style: TextStyle(color: Colors.white, fontSize: 18),
                   )
                 ],
@@ -65,21 +68,19 @@ class _TaskScreenState extends State<TaskScreen> {
                       topRight: Radius.circular(30)),
                 ),
                 child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: ListView(children: <Widget>[
-                      TaskTile(
-                        taskTitle: tasks[0].name!,
-                        isChecked: tasks[0].isCompleted,
-                      ),
-                      TaskTile(
-                        taskTitle: tasks[1].name!,
-                        isChecked: tasks[1].isCompleted,
-                      ),
-                      TaskTile(
-                        taskTitle: tasks[2].name!,
-                        isChecked: tasks[2].isCompleted,
-                      ),
-                    ])),
+                  padding: const EdgeInsets.all(10.0),
+                  child: ListView.builder(
+                    itemCount: tasks.length,
+                    itemBuilder: (context, index) {
+                      return TaskTile(
+                          taskTitle: tasks[index].name!,
+                          isChecked: tasks[index].isCompleted,
+                          toggleCheckbox: (newValue) {
+                            toggleTaskCompletion(index, newValue);
+                          });
+                    },
+                  ),
+                ),
               ),
             ),
           ],
@@ -107,6 +108,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                 fontSize: 32, fontWeight: FontWeight.w600),
                           ),
                           TextField(
+                            controller: myController,
                             decoration: InputDecoration(
                               enabledBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
@@ -129,7 +131,15 @@ class _TaskScreenState extends State<TaskScreen> {
                                   Colors.lightBlueAccent),
                             ),
                             onPressed: () {
-                              // CustomListView.addTask()
+                              setState(() {
+                                tasks.add(
+                                  Task(
+                                    name: myController.text,
+                                  ),
+                                );
+                                myController.clear();
+                                Navigator.pop(context);
+                              });
                             },
                             child: Text(
                               'Submit',
