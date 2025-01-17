@@ -1,7 +1,20 @@
 import "package:flutter/material.dart";
+import 'models/add_task.dart';
+import 'widgets/task_tile.dart';
 
-class TaskScreen extends StatelessWidget {
+class TaskScreen extends StatefulWidget {
   const TaskScreen({super.key});
+
+  @override
+  State<TaskScreen> createState() => _TaskScreenState();
+}
+
+class _TaskScreenState extends State<TaskScreen> {
+  List<Task> tasks = [
+    Task(name: 'Buy Milk', isCompleted: false),
+    Task(name: 'Buy Milk', isCompleted: false),
+    Task(name: 'Buy Milk', isCompleted: false)
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -52,19 +65,21 @@ class TaskScreen extends StatelessWidget {
                       topRight: Radius.circular(30)),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: ListView(children: [
-                    TaskList(
-                      text: 'Task 1',
-                    ),
-                    TaskList(
-                      text: 'Task 2',
-                    ),
-                    TaskList(
-                      text: 'Task 3',
-                    ),
-                  ]),
-                ),
+                    padding: const EdgeInsets.all(10.0),
+                    child: ListView(children: <Widget>[
+                      TaskTile(
+                        taskTitle: tasks[0].name!,
+                        isChecked: tasks[0].isCompleted,
+                      ),
+                      TaskTile(
+                        taskTitle: tasks[1].name!,
+                        isChecked: tasks[1].isCompleted,
+                      ),
+                      TaskTile(
+                        taskTitle: tasks[2].name!,
+                        isChecked: tasks[2].isCompleted,
+                      ),
+                    ])),
               ),
             ),
           ],
@@ -86,8 +101,8 @@ class TaskScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Text(
-                            textAlign: TextAlign.center,
                             'Add Task',
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: 32, fontWeight: FontWeight.w600),
                           ),
@@ -110,10 +125,12 @@ class TaskScreen extends StatelessWidget {
                           ),
                           TextButton(
                             style: ButtonStyle(
-                              backgroundColor: WidgetStatePropertyAll(
+                              backgroundColor: WidgetStateProperty.all(
                                   Colors.lightBlueAccent),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              // CustomListView.addTask()
+                            },
                             child: Text(
                               'Submit',
                               style: TextStyle(color: Colors.white),
@@ -135,45 +152,5 @@ class TaskScreen extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class TaskList extends StatelessWidget {
-  const TaskList({super.key, required this.text});
-  final String text;
-
-  get onChanged => null;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-        title: Text(
-          text,
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
-        ),
-        trailing: CheckBox());
-  }
-}
-
-class CheckBox extends StatefulWidget {
-  const CheckBox({super.key});
-
-  @override
-  State<CheckBox> createState() => _CheckBoxState();
-}
-
-class _CheckBoxState extends State<CheckBox> {
-  bool isChecked = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return Checkbox(
-        activeColor: Colors.lightBlueAccent,
-        value: isChecked,
-        onChanged: (newValue) {
-          setState(() {
-            isChecked = newValue!;
-          });
-        });
   }
 }
